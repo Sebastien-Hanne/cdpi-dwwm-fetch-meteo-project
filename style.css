@@ -1,3 +1,32 @@
 body{
     margin : 0px;
+    min-height: 100vh;
+    background: linear-gradient(180deg,rgba(12, 67, 232, 1) 0%, rgba(57, 122, 250, 1) 35%, rgba(0, 212, 255, 1) 100%);
+    color: aliceblue;
+    font-size: 2rem;
+    font-style: italic;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.localisation {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+
+.noche {
+    background: linear-gradient(90deg,rgba(2, 0, 36, 1) 0%, rgba(67, 9, 121, 1) 35%, rgba(156, 27, 166, 1) 100%);
 }

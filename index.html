@@ -1,14 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZmCULaM1u3L... crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <main>
-        
+        <section class="meteo-search">
+            <div class="search">
+                <form class="search">
+                    <input type="text" name="ville" placeholder="ville">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </form>
+            </div>
+            <div class="latitude-longitude">
+                <form class="lat-long">
+                    <input type="text" name="latitude" placeholder="latitude">
+                    <input type="text" name="longitude" placeholder="longitude">
+                    <button>recherche</button>
+                </form>
+            </div>
+        </section>
+        <section class="meteo-detail">
+            <div class="detail">
+                <h1 class="ville"></h1>
+                <i class="logo"></i>
+                <p class="degre"></p>
+            </div>
+        </section>
+        <div class="localisation">
+            <p>Chez moi ?</p>
+            <i class="fa-solid fa-magnifying-glass-location"></i>
+        </div>
     </main>
 </body>
 <script src="script.js"></script>

@@ -1,81 +1,74 @@
 async function main() {
   console.log("Hello meteo !");
-  //   onPosition();
   navigator.geolocation.getCurrentPosition(onPosition);
-    positionVille();
+
+  const formVille = document.querySelector(".search form");
+  formVille.addEventListener("submit", function (event) {
+    event.preventDefault();
+    const villeName = formVille.querySelector("input").value;
+    if (villeName) {
+      positionVille(villeName);
+    }
+  });
 }
 main();
 
-/**
- * S'execute quand l'utilisateur a accepté la geolocalisation.
- *
- * @param {*} position_obj
- */
 async function onPosition(position_obj) {
   const lat = position_obj.coords.latitude;
   const long = position_obj.coords.longitude;
-  console.log(position_obj);
 
   await fetch(
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=precipitation,cloud_cover,temperature_2m,apparent_temperature,is_day,weather_code`)
+    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${long}&current=precipitation,cloud_cover,temperature_2m,apparent_temperature,is_day,weather_code`
+  )
     .then((res) => res.json())
     .then((meteo_obj) => {
       console.log(meteo_obj);
-
       detail(meteo_obj);
     });
 }
 
 async function detail(meteo_obj) {
-  
   const temperature = document.querySelector(".degre");
   const icone = document.querySelector(".logo");
-  console.log(meteo_obj);
-  temperature.textContent = meteo_obj.current.temperature_2m;
-  console.log(temperature);
+  const ville = document.querySelector(".ville");
 
-  
-//   if (meteo_obj.current.weathercode === 0) {
-//     console.log(meteo_obj.current.weathercode);
-//     icone.src = "fa-solid fa-sun";
-//   } else if (meteo_obj.current.weathercode === 1) {
-//     icone.src = "fa-solid fa-cloud";
-//   } else if (meteo_obj.current.weathercode === 2) {
-//     icone.src = "fa-solid fa-cloud-rain";
-//   }
-//   document.querySelector(".degre").temperature;
-//   if (meteo_obj.current.is_day == 1) {
-//     document.querySelector("body").classList.add("jour");
-//     document.querySelector("body").classList.remove("nuit");
-//   } else {
-//     document.querySelector("body").classList.add("nuit");
-//     document.querySelector("body").classList.remove("jour");
-//     lement.classList.toggle("noche");
-//   }
+  const temp = meteo_obj.current.temperature_2m;
+  temperature.textContent = `${temp}`;
+
+  if (meteo_obj.current.weather_code === 0) {
+    icone.className = "logo fa-solid fa-sun";
+  } else if (meteo_obj.current.weather_code === 1) {
+    icone.className = "logo fa-solid fa-cloud";
+  } else if (meteo_obj.current.weather_code === 2) {
+    icone.className = "logo fa-solid fa-cloud-rain";
+  }
 }
+
+// positionVille("Paris");
 
 async function positionVille(villeName) {
-    const lat = position_obj.coords.latitude;
-    const long = position_obj.coords.longitude;
-    const names = lat + "," + long;
-    console.log(villeName)
+  console.log(villeName);
   const posVille = await fetch(
-        `https://geocoding-api.open-meteo.com/v1/searchsearch?name=${villeName}&latitude=${lat}&longitude=${long}&count=1&language=fr&format=json`
-
+    `https://geocoding-api.open-meteo.com/v1/search?name=${villeName}&count=1&language=fr&format=json`
   )
-    .then(res => res.json())
-    .then((villeName) => {
-        const ville = document.querySelector(".ville");
-        console.log(posVille)
-        ville.textContent = names.name;
-        
-        console.log(villeName)
-});
-//   return posVille.results[0];
-}
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      if (!data.results || data.results.length <= 0) throw "Ville non trouvée";
 
-/**
-    * const villeName = lat + "," + long;
-    const formData_obj = new FormData(formPosition_obj);
-    console.log(formData_obj);
-    **/
+      const latitude = data.results[0].latitude;
+      const longitude = data.results[0].longitude;
+      console.log(`${villeName},${latitude},${longitude}`);
+
+      const ville = document.querySelector(".ville");
+      ville.textContent = `${villeName}`;
+
+      fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=precipitation,cloud_cover,temperature_2m,apparent_temperature,is_day,weather_code`
+      )
+        .then((res) => res.json())
+        .then((meteo_obj) => {
+          detail(meteo_obj);
+        });
+    });
+}
